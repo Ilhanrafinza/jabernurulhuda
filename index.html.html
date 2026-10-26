@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JABer - Jajanan Ahad Berkah | DKM Nurul Huda Kedaung Pamulang</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        accent: {
+                            yellow: '#fbbf24',
+                            orange: '#f97316',
+                            blue: '#0284c7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+        .booth-active {
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-emerald-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Masjid Name -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200">
+                        <i class="fa-solid font-bold text-2xl fa-store"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-2xl tracking-tight text-emerald-800 font-display">JABer</span>
+                            <span class="bg-amber-400 text-emerald-950 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Tiap Ahad</span>
+                        </div>
+                        <p class="text-xs font-medium text-slate-500 flex items-center gap-1">
+                            <i class="fa-solid fa-mosque text-emerald-600"></i> DKM Nurul Huda • Kedaung Pamulang
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-6 text-sm font-semibold">
+                    <a href="#beranda" class="px-3 py-2 text-slate-700 hover:text-emerald-600 transition">Beranda</a>
+                    <a href="#denah" class="px-3 py-2 text-slate-700 hover:text-emerald-600 transition flex items-center gap-1">
+                        <i class="fa-solid fa-map-location-dot text-emerald-500"></i> Peta Booth
+                    </a>
+                    <a href="#tenant" class="px-3 py-2 text-slate-700 hover:text-emerald-600 transition">Daftar Tenant</a>
+                    <a href="#jadwal" class="px-3 py-2 text-slate-700 hover:text-emerald-600 transition">Rangkaian Acara</a>
+                    <a href="#damas" class="px-3 py-2 text-emerald-700 hover:text-emerald-900 bg-emerald-50 rounded-lg transition">Infaq & DAMas</a>
+                </nav>
+
+                <!-- Actions & Mobile Menu Toggle -->
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleShoppingList()" class="relative bg-amber-100 hover:bg-amber-200 text-amber-900 p-2.5 rounded-xl transition flex items-center gap-2 font-bold text-xs sm:text-sm">
+                        <i class="fa-solid fa-basket-shopping text-amber-600 text-base"></i>
+                        <span class="hidden sm:inline">Rencana Belanja</span>
+                        <span id="cartCount" class="bg-amber-500 text-white text-xs font-black rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="openRegisterModal()" class="hidden sm:flex bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition shadow-md shadow-emerald-200 items-center gap-2">
+                        <i class="fa-solid fa-plus-circle"></i> Daftar UMKM
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-slate-700 p-2 text-xl focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-5 space-y-2 text-sm font-medium">
+            <a href="#beranda" class="block py-2 text-slate-700 font-semibold">Beranda</a>
+            <a href="#denah" class="block py-2 text-slate-700 font-semibold">Peta Booth / Layout</a>
+            <a href="#tenant" class="block py-2 text-slate-700 font-semibold">Katalog Tenant & Menu</a>
+            <a href="#jadwal" class="block py-2 text-slate-700 font-semibold">Rangkaian Ahad Pagi</a>
+            <a href="#damas" class="block py-2 text-emerald-700 font-bold">Sedekah & Dana Abadi Masjid</a>
+            <button onclick="openRegisterModal()" class="w-full mt-2 bg-emerald-600 text-white py-2.5 rounded-xl font-bold text-center">
+                <i class="fa-solid fa-store mr-1"></i> Daftar Berjualan di JABer
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="beranda" class="relative overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-800 to-teal-900 text-white py-12 md:py-20">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Left Column Text -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-emerald-700/60 border border-emerald-500/40 rounded-full px-4 py-1.5 text-amber-300 text-xs sm:text-sm font-semibold backdrop-blur-sm">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>InsyaAllah Hadir Setiap Ahad Pagi • Ba'da Subuh</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-display leading-tight">
+                        Belanja Halal,<br>
+                        <span class="text-amber-400 underline decoration-amber-400/40">Dapat Pahala & Berkah</span>
+                    </h1>
+
+                    <p class="text-emerald-100 text-base sm:text-lg max-w-2xl leading-relaxed">
+                        Wadah silaturahmi ekonomi jamaah <strong>DKM Nurul Huda Kedaung Pamulang</strong>. Memudahkan jamaah mendapatkan kuliner dan kebutuhan sehari-hari yang halal, thayyib, dan penuh kebeberkahan.
+                    </p>
+
+                    <!-- Hadith Highlight Box -->
+                    <div class="bg-emerald-950/50 border border-emerald-700/50 p-4 sm:p-5 rounded-2xl text-xs sm:text-sm text-emerald-100 space-y-2 backdrop-blur-sm">
+                        <p class="italic text-amber-200">
+                            <i class="fa-solid fa-quote-left mr-1 opacity-70"></i>
+                            "Allah merahmati seseorang yang bersikap mudah ketika menjual, ketika membeli, dan ketika menagih haknya."
+                        </p>
+                        <p class="font-bold text-emerald-400 text-right">— HR. Bukhari no. 2076</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+                        <a href="#tenant" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold px-6 py-3.5 rounded-xl shadow-lg shadow-amber-400/20 transition flex items-center gap-2">
+                            <i class="fa-solid fa-utensils"></i> Cari Jajanan & Tenant
+                        </a>
+                        <a href="#denah" class="bg-emerald-700/80 hover:bg-emerald-600 text-white font-bold px-6 py-3.5 rounded-xl border border-emerald-500/50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-map"></i> Lihat Layout Peta Booth
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column Interactive Info Card -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white text-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-emerald-100 space-y-6">
+                        <div class="flex items-center justify-between border-b pb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Agenda Ahad Pagi</h3>
+                                <p class="text-xs text-slate-500">DKM Nurul Huda Kedaung Pamulang</p>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full">
+                                Rutin Ahad
+                            </span>
+                        </div>
+
+                        <!-- 3 Steps -->
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-900">Shalat Subuh Berjamaah</h4>
+                                    <p class="text-xs text-slate-500">Mulai hari dengan keberkahan di masjid</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-900">Dilanjut Pengajian Subuh</h4>
+                                    <p class="text-xs text-slate-500">Menimba ilmu syar'i bersama Ustadz</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-extrabold flex items-center justify-center shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-900">Silaturahmi Ekonomi (JABer)</h4>
+                                    <p class="text-xs text-slate-500">Belanja aneka jajanan & produk UMKM jamaah</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Banner Quote Abu Dawud -->
+                        <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200/60 text-xs text-amber-900 flex gap-3 items-center">
+                            <i class="fa-solid fa-sun text-amber-500 text-xl shrink-0"></i>
+                            <div>
+                                <p class="italic">"Ya Allah, berkahilah untuk umatku pada waktu paginya."</p>
+                                <span class="font-semibold text-[10px] text-amber-700">(HR. Abu Dawud, Tirmidzi, & Ibnu Majah)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE BOOTH MAP / DENAH ACARA -->
+    <section id="denah" class="py-16 bg-slate-100 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-emerald-600 font-extrabold text-xs uppercase tracking-wider bg-emerald-100 px-3 py-1 rounded-full">Peta Interaktif</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-display text-slate-900 mt-2">Denah Stand & Booth JABer</h2>
+                <p class="text-slate-600 text-sm sm:text-base mt-2">Klik nomor booth/stand di halaman masjid di bawah ini untuk melihat detail produk & menunya!</p>
+            </div>
+
+            <!-- Visual Map Simulation Container -->
+            <div class="bg-white rounded-3xl p-4 sm:p-8 shadow-xl border border-slate-200 overflow-hidden relative">
+                
+                <!-- Legend Header -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        <span class="text-xs font-bold text-slate-600">Booth Terisi & Buka</span>
+                        <div class="w-3 h-3 rounded-full bg-slate-300 ml-3"></div>
+                        <span class="text-xs font-bold text-slate-600">Booth Kosong / Slot Terbatas</span>
+                    </div>
+                    <div class="text-xs text-slate-500 font-medium">
+                        <i class="fa-solid fa-circle-info text-amber-500 mr-1"></i> Area Halaman Utama DKM Nurul Huda
+                    </div>
+                </div>
+
+                <!-- Map Grid Layout (Simulated Courtyard) -->
+                <div class="relative bg-emerald-50/50 rounded-2xl p-6 border-2 border-dashed border-emerald-200 min-h-[420px] flex flex-col justify-between">
+                    
+                    <!-- Top Zone: Bangunan Utama Masjid -->
+                    <div class="bg-gradient-to-r from-emerald-800 to-teal-800 text-white rounded-xl py-4 px-6 text-center shadow-md mb-8 flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-mosque text-2xl text-amber-300"></i>
+                        <div>
+                            <h4 class="font-extrabold text-sm sm:text-base tracking-wide">BANGUNAN UTAMA MASJID NURUL HUDA</h4>
+                            <p class="text-[11px] text-emerald-200">Area Shalat & Pengajian Subuh</p>
+                        </div>
+                    </div>
+
+                    <!-- Middle Zone: Courtyard Booths -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 my-4">
+                        <!-- Dynamic JS Generated Map Stalls Here -->
+                        <div id="boothMapGrid" class="contents"></div>
+                    </div>
+
+                    <!-- Bottom Zone: Entrance & Parkir -->
+                    <div class="mt-8 pt-4 border-t border-emerald-200/80 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2">
+                        <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+                            <i class="fa-solid fa-square-parking text-blue-600 text-lg"></i>
+                            <span class="font-bold">Area Parkir Jamaah</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+                            <i class="fa-solid fa-hand-holding-heart text-amber-500 text-lg"></i>
+                            <span class="font-bold">Meja Informasi & Kasir Infaq DAMas</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+                            <i class="fa-solid fa-door-open text-emerald-600 text-lg"></i>
+                            <span class="font-bold">Gerbang Masuk Utama</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KATALOG TENANT & MENU -->
+    <section id="tenant" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                    <span class="text-amber-600 font-extrabold text-xs uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full">Menu Jajanan Ahad</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-display text-slate-900 mt-2">Katalog Tenant & Kuliner</h2>
+                    <p class="text-slate-600 text-sm sm:text-base mt-1">Jelajahi ragam produk makanan halal, minuman segar, hingga kebutuhan keluarga.</p>
+                </div>
+
+                <!-- Search & Filter Controls -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="searchInput" oninput="filterTenants()" placeholder="Cari lontong, dimsum, peci..." class="pl-10 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full sm:w-64">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Badges -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 text-sm no-scrollbar" id="categoryFilters">
+                <button onclick="setCategory('All')" class="cat-btn active bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition">
+                    Semua Produk
+                </button>
+                <button onclick="setCategory('Makanan Berat')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition">
+                    🍛 Makanan Berat
+                </button>
+                <button onclick="setCategory('Camilan')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition">
+                    🥟 Camilan & Snack
+                </button>
+                <button onclick="setCategory('Minuman')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition">
+                    🥤 Minuman & Kopi
+                </button>
+                <button onclick="setCategory('Non-Kuliner')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition">
+                    👕 Busana & Herbal
+                </button>
+            </div>
+
+            <!-- Tenants Grid Container -->
+            <div id="tenantsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dynamic Tenant Cards will be rendered here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12">
+                <i class="fa-solid fa-store-slash text-4xl text-slate-300 mb-3"></i>
+                <p class="text-slate-500 font-medium text-sm">Tidak menemukan tenant atau makanan yang dicari.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RANGKAIAN ACARA (RUNDOWN) -->
+    <section id="jadwal" class="py-16 bg-slate-900 text-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-amber-400 font-extrabold text-xs uppercase tracking-wider bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">Rangkaian Acara</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold font-display mt-2">Jadwal Ahad Pagi Masjid</h2>
+                <p class="text-slate-400 text-sm mt-2">Makmurkan masjid sekaligus perkuat ekonomi umat bersama-sama.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Timeline 1 -->
+                <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl relative">
+                    <div class="text-amber-400 font-extrabold text-2xl mb-1">04.30 - 05.15 WIB</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Shalat Subuh Berjamaah</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Melaksanakan Shalat Subuh berjamaah dilanjut doa bersama seluruh jamaah DKM Nurul Huda.</p>
+                </div>
+
+                <!-- Timeline 2 -->
+                <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-2xl relative">
+                    <div class="text-amber-400 font-extrabold text-2xl mb-1">05.15 - 06.00 WIB</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Pengajian Ahad Pagi</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Kajian rutin tematis menambah wawasan keislaman dan keberkahan hidup.</p>
+                </div>
+
+                <!-- Timeline 3 -->
+                <div class="bg-gradient-to-br from-emerald-800 to-teal-900 border border-emerald-500/50 p-6 rounded-2xl relative shadow-lg">
+                    <div class="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded uppercase absolute top-4 right-4">Utama</div>
+                    <div class="text-amber-300 font-extrabold text-2xl mb-1">06.00 - 09.00 WIB</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Silaturahmi Ekonomi JABer</h3>
+                    <p class="text-xs text-emerald-100 leading-relaxed">Bazar Jajanan Ahad Berkah dibuka! Berbelanja makanan, sarapan pagi, & mendukung UMKM jamaah.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEDEKAH & DANA ABADI MASJID (DAMas) -->
+    <section id="damas" class="py-16 bg-gradient-to-br from-emerald-50 via-teal-50 to-emerald-100 border-t border-emerald-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-emerald-200/80">
+                <div class="grid lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-7 space-y-5">
+                        <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full uppercase">
+                            DAMas • Dana Abadi Masjid Nurul Huda
+                        </span>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 font-display">
+                            JABer — Sarana Memakmurkan Masjid Sekaligus Jamaah
+                        </h2>
+                        <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                            Sebagian dari keutamaan program JABer juga bermuara pada pengembangan <strong>DAMas (Dana Abadi Masjid)</strong> untuk pemeliharaan fasilitas masjid dan pemberdayaan ekonomi umat.
+                        </p>
+                        
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-2">
+                            <p class="text-xs font-bold text-emerald-900 flex items-center gap-2">
+                                <i class="fa-solid fa-building-columns text-emerald-600"></i> Rekening Transfer Resmi:
+                            </p>
+                            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-emerald-200">
+                                <div>
+                                    <div class="font-extrabold text-slate-900 text-base sm:text-lg">Bank Syariah Indonesia (BSI)</div>
+                                    <div class="text-emerald-700 font-extrabold text-xl tracking-wider" id="noRekening">7362864903</div>
+                                    <div class="text-xs text-slate-500">a.n. <strong>DAMas Nurul Huda</strong> (KCP Pamulang)</div>
+                                </div>
+                                <button onclick="copyRekening()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Salin No. Rek</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-500 font-medium italic">
+                            "Sedekah Hari Ini, Manfaatnya Abadi"
+                        </p>
+                    </div>
+
+                    <!-- QRIS & Graphic Card -->
+                    <div class="lg:col-span-5 flex flex-col items-center text-center">
+                        <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-xl w-full max-w-xs border border-slate-800">
+                            <div class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2">QRIS standar pembayaran</div>
+                            <!-- Mock QRIS Visual -->
+                            <div class="bg-white p-4 rounded-2xl mb-3 flex flex-col items-center justify-center border-2 border-amber-400">
+                                <i class="fa-solid fa-qrcode text-8xl text-slate-900"></i>
+                                <span class="text-[10px] text-slate-500 font-bold mt-2">DANA ABADI MASJID NURUL HUDA</span>
+                                <span class="text-[9px] text-slate-400">NMID: ID1024359215833</span>
+                            </div>
+                            <p class="text-xs text-amber-300 font-semibold">Dapat di-scan dengan M-Banking / E-Wallet Apapun</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <div class="flex items-center gap-2 text-white font-extrabold text-xl font-display">
+                        <i class="fa-solid fa-mosque text-emerald-400"></i> DKM Nurul Huda
+                    </div>
+                    <p class="text-xs mt-1 text-slate-500">Kedaung, Pamulang, Tangerang Selatan • JABer (Jajanan Ahad Berkah)</p>
+                </div>
+                <div class="text-xs text-center md:text-right text-slate-500">
+                    &copy; 2026 DKM Nurul Huda Pamulang. Dikembangkan untuk kemakmuran masjid & ekonomi jamaah.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: TENANT DETAIL -->
+    <div id="tenantModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl transform transition-all">
+            <div class="relative bg-gradient-to-r from-emerald-700 to-teal-800 text-white p-6">
+                <button onclick="closeTenantModal()" class="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="inline-block bg-amber-400 text-slate-950 text-[11px] font-black px-2.5 py-0.5 rounded-full mb-2" id="modalBoothNo">
+                    Stand #01
+                </div>
+                <h3 class="text-2xl font-extrabold font-display" id="modalName">Nama Tenant</h3>
+                <p class="text-xs text-emerald-100 flex items-center gap-1.5 mt-1" id="modalOwner">
+                    <i class="fa-solid fa-user"></i> Pemilik
+                </p>
+            </div>
+            
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <p class="text-xs text-slate-600 leading-relaxed" id="modalDesc"></p>
+
+                <h4 class="font-bold text-sm text-slate-900 border-b pb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-utensils text-emerald-600"></i> Daftar Menu & Harga
+                </h4>
+                
+                <div class="space-y-2.5" id="modalMenuList">
+                    <!-- Dynamic Menu Items -->
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end gap-2">
+                <button onclick="closeTenantModal()" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-xl transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: RENCANA BELANJA (WISHLIST) -->
+    <div id="shoppingListModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl">
+            <div class="bg-amber-400 text-slate-950 p-5 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-xl"></i>
+                    <h3 class="font-extrabold font-display text-lg">Rencana Belanja Ahad</h3>
+                </div>
+                <button onclick="toggleShoppingList()" class="text-slate-900 hover:text-black font-bold">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
+                <p class="text-xs text-slate-500">Tandai kuliner favorit yang ingin Anda beli saat bazar JABer setelah Subuh!</p>
+                <div id="cartItemsList" class="space-y-2">
+                    <!-- Dynamic Cart Items -->
+                </div>
+                <div id="emptyCartText" class="text-center py-6 text-slate-400 text-xs">
+                    Belum ada menu yang dimasukkan ke rencana belanja.
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 border-t flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-slate-500 uppercase font-bold block">Estimasi Total</span>
+                    <span class="text-emerald-700 font-extrabold text-lg" id="cartTotal">Rp 0</span>
+                </div>
+                <button onclick="alert('Daftar belanja tersimpan! Sampai jumpa di JABer DKM Nurul Huda hari Ahad pagi!')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Simpan Rencana
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DAFTAR TENANT / UMKM BARU -->
+    <div id="registerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl">
+            <div class="bg-emerald-800 text-white p-5 flex justify-between items-center">
+                <div>
+                    <h3 class="font-extrabold font-display text-lg">Pendaftaran Tenant JABer</h3>
+                    <p class="text-[11px] text-emerald-200">Khusus Jamaah & UMKM Sekitar Masjid Nurul Huda</p>
+                </div>
+                <button onclick="closeRegisterModal()" class="text-white hover:text-emerald-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleRegister(event)" class="p-5 space-y-3.5 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Pemilik / Penjual</label>
+                    <input type="text" required placeholder="Contoh: Pak Herman / Ibu Ani" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Usaha / Stand</label>
+                    <input type="text" required placeholder="Contoh: Dapur Berkah Pamulang" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Kategori Produk</label>
+                    <select required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <option value="Makanan Berat">Makanan Berat</option>
+                        <option value="Camilan">Camilan & Snack</option>
+                        <option value="Minuman">Minuman & Kopi</option>
+                        <option value="Non-Kuliner">Busana Muslim / Herbal / Sembako</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nomor WhatsApp</label>
+                    <input type="tel" required placeholder="0812xxxxxxxx" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Deskripsi Menu & Range Harga</label>
+                    <textarea rows="2" placeholder="Contoh: Nasi Uduk Komplit Rp 12.000, Lontong Sayur Rp 10.000" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+                        Kirim Pendaftaran
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data Tenants & Menu Items
+        const tenantsData = [
+            {
+                id: 1,
+                booth: "Stand #01",
+                name: "Nasi Uduk & Lontong Sayur Mba Nur",
+                owner: "Ibu Nurul - Jamaah RT 02",
+                category: "Makanan Berat",
+                desc: "Nasi Uduk Gurih dengan semur jengkol, balado telur, biun, dan bakwan hangat. Tersedia juga Lontong Sayur khas Betawi.",
+                badge: "Terfavorit Subuh",
+                items: [
+                    { name: "Nasi Uduk Komplit Telur", price: 12000 },
+                    { name: "Lontong Sayur Semur", price: 10000 },
+                    { name: "Bakwan / Tahu Goreng", price: 2000 }
+                ]
+            },
+            {
+                id: 2,
+                booth: "Stand #02",
+                name: "Kopi Subuh & Teh Tarik Bang Dul",
+                owner: "Bang Abdul - Remaja Masjid",
+                category: "Minuman",
+                desc: "Kopi tubruk pilihan, kopi susu gula aren segar, dan Teh Tarik rempah hangat penyejuk setelah pengajian subuh.",
+                badge: "Hangat & Segar",
+                items: [
+                    { name: "Kopi Susu Gula Aren", price: 10000 },
+                    { name: "Teh Tarik Rempah", price: 8000 },
+                    { name: "Kopi Tubruk Arabika", price: 7000 }
+                ]
+            },
+            {
+                id: 3,
+                booth: "Stand #03",
+                name: "Dimsum & Choipan Pamulang",
+                owner: "Pak Herman",
+                category: "Camilan",
+                desc: "Dimsum ayam udang lembut dan Choipan kukus isi bengkoang & ebi khas Pontianak halal.",
+                badge: "Laris Manis",
+                items: [
+                    { name: "Dimsum Ayam (Porsi isi 4)", price: 15000 },
+                    { name: "Choipan Kukus (Porsi isi 5)", price: 15000 }
+                ]
+            },
+            {
+                id: 4,
+                booth: "Stand #04",
+                name: "Bubur Ayam Berkah Cianjur",
+                owner: "H. Asep",
+                category: "Makanan Berat",
+                desc: "Bubur ayam khas Cianjur kuah kuning dengan topping kerupuk pangsit renyah dan ati ampela.",
+                badge: "Favorit Sarapan",
+                items: [
+                    { name: "Bubur Ayam Biasa", price: 10000 },
+                    { name: "Bubur Ayam + Ati Ampela", price: 13000 }
+                ]
+            },
+            {
+                id: 5,
+                booth: "Stand #05",
+                name: "Risoles Mayonaise & Tahu Jeletot",
+                owner: "Ibu Dian",
+                category: "Camilan",
+                desc: "Risoles isi mayo, smoked beef, dan telur. Serta tahu goreng pedas jeletot yang renyah.",
+                badge: "Snack Hati",
+                items: [
+                    { name: "Risoles Mayo (3 pcs)", price: 10000 },
+                    { name: "Tahu Jeletot (3 pcs)", price: 10000 }
+                ]
+            },
+            {
+                id: 6,
+                booth: "Stand #06",
+                name: "Es Kuwut Bali & Jus Buah Hidayah",
+                owner: "Mas Wahyu",
+                category: "Minuman",
+                desc: "Es kuwut melon biji selasih yang menyegarkan dan varian jus buah segar alami tanpa pemanis buatan.",
+                badge: "Segar Sehat",
+                items: [
+                    { name: "Es Kuwut Melon Selasih", price: 8000 },
+                    { name: "Jus Alpukat Kocok", price: 12000 }
+                ]
+            },
+            {
+                id: 7,
+                booth: "Stand #07",
+                name: "Soto Ayam Kampung Pak Darmo",
+                owner: "Pak Darmo",
+                category: "Makanan Berat",
+                desc: "Soto ayam koya gurih kuah bening segar dengan potongan ayam kampung asli.",
+                badge: "Kuah Hangat",
+                items: [
+                    { name: "Soto Ayam + Nasi", price: 15000 },
+                    { name: "Sate Telur Puyuh", price: 3000 }
+                ]
+            },
+            {
+                id: 8,
+                booth: "Stand #08",
+                name: "Busana Muslim & Peci Syarifah",
+                owner: "Ustadzah Syarifah",
+                category: "Non-Kuliner",
+                desc: "Aneka peci, sarung berkualitas, hijab instan, dan minyak wangi non-alkohol sunnah.",
+                badge: "Produk Syariah",
+                items: [
+                    { name: "Peci Rajut Premium", price: 25000 },
+                    { name: "Miyak Parfum Non-Alkohol", price: 15000 }
+                ]
+            }
+        ];
+
+        // Cart / Wishlist State
+        let shoppingCart = [];
+        let activeCategory = 'All';
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMapGrid();
+            renderTenants();
+            setupMobileMenu();
+        });
+
+        // Setup Mobile Navigation Menu
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+
+        // Render Interactive Booth Map Grid
+        function renderMapGrid() {
+            const container = document.getElementById('boothMapGrid');
+            container.innerHTML = '';
+
+            // We create 10 slots
+            for (let i = 1; i <= 10; i++) {
+                const boothCode = `Stand #${i < 10 ? '0' + i : i}`;
+                const tenant = tenantsData.find(t => t.booth === boothCode);
+
+                const card = document.createElement('div');
+                if (tenant) {
+                    card.className = "bg-white p-3 rounded-xl border-2 border-emerald-500 hover:border-amber-400 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between group";
+                    card.onclick = () => openTenantModal(tenant.id);
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="bg-emerald-100 text-emerald-800 font-extrabold text-[10px] px-2 py-0.5 rounded">${tenant.booth}</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        </div>
+                        <div class="font-extrabold text-xs text-slate-800 line-clamp-1 group-hover:text-emerald-700">${tenant.name}</div>
+                        <div class="text-[10px] text-slate-500 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-tag text-amber-500"></i> ${tenant.category}
+                        </div>
+                    `;
+                } else {
+                    card.className = "bg-slate-50/80 p-3 rounded-xl border-2 border-dashed border-slate-300 flex flex-col justify-between opacity-70";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="bg-slate-200 text-slate-600 font-bold text-[10px] px-2 py-0.5 rounded">${boothCode}</span>
+                            <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+                        </div>
+                        <div class="font-semibold text-xs text-slate-400 italic">Slot Kosong</div>
+                        <button onclick="openRegisterModal()" class="text-[10px] text-emerald-600 font-bold hover:underline text-left mt-1">+ Daftar</button>
+                    `;
+                }
+                container.appendChild(card);
+            }
+        }
+
+        // Render Tenants Grid Cards
+        function renderTenants() {
+            const grid = document.getElementById('tenantsGrid');
+            const empty = document.getElementById('emptyState');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            grid.innerHTML = '';
+            
+            const filtered = tenantsData.filter(t => {
+                const matchesCat = activeCategory === 'All' || t.category === activeCategory;
+                const matchesSearch = t.name.toLowerCase().includes(searchVal) || 
+                                      t.desc.toLowerCase().includes(searchVal) ||
+                                      t.items.some(i => i.name.toLowerCase().includes(searchVal));
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                filtered.forEach(t => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between hover:-translate-y-1";
+                    
+                    const minPrice = Math.min(...t.items.map(i => i.price));
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                                    ${t.booth}
+                                </span>
+                                <span class="bg-amber-100 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-md">
+                                    ${t.badge}
+                                </span>
+                            </div>
+
+                            <h3 class="font-extrabold text-base text-slate-900 leading-snug mb-1">${t.name}</h3>
+                            <p class="text-xs text-slate-500 mb-3 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-user text-emerald-600"></i> ${t.owner}
+                            </p>
+                            <p class="text-xs text-slate-600 line-clamp-2 mb-4 leading-relaxed">${t.desc}</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-slate-400 block font-semibold">Mulai dari</span>
+                                <span class="text-emerald-700 font-extrabold text-sm">Rp ${minPrice.toLocaleString('id-ID')}</span>
+                            </div>
+                            <button onclick="openTenantModal(${t.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1">
+                                Lihat Menu <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.textContent.includes(cat) || (cat === 'All' && btn.textContent.includes('Semua'))) {
+                    btn.className = "cat-btn active bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition";
+                } else {
+                    btn.className = "cat-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition";
+                }
+            });
+            renderTenants();
+        }
+
+        function filterTenants() {
+            renderTenants();
+        }
+
+        // Open Tenant Detail Modal
+        function openTenantModal(id) {
+            const tenant = tenantsData.find(t => t.id === id);
+            if (!tenant) return;
+
+            document.getElementById('modalBoothNo').textContent = tenant.booth;
+            document.getElementById('modalName').textContent = tenant.name;
+            document.getElementById('modalOwner').textContent = tenant.owner;
+            document.getElementById('modalDesc').textContent = tenant.desc;
+
+            const menuList = document.getElementById('modalMenuList');
+            menuList.innerHTML = '';
+
+            tenant.items.forEach((item, index) => {
+                const isAdded = shoppingCart.some(c => c.tenantId === tenant.id && c.itemName === item.name);
+                
+                const itemRow = document.createElement('div');
+                itemRow.className = "flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/70";
+                itemRow.innerHTML = `
+                    <div>
+                        <div class="font-bold text-xs text-slate-800">${item.name}</div>
+                        <div class="text-emerald-700 font-extrabold text-xs mt-0.5">Rp ${item.price.toLocaleString('id-ID')}</div>
+                    </div>
+                    <button onclick="toggleCartItem(${tenant.id}, '${item.name.replace(/'/g, "\\'")}', ${item.price})" 
+                            class="${isAdded ? 'bg-amber-500 text-white' : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'} px-3 py-1.5 rounded-lg font-bold text-xs transition flex items-center gap-1">
+                        <i class="fa-solid ${isAdded ? 'fa-check' : 'fa-plus'}"></i> ${isAdded ? 'Tersimpan' : '+ Belanja'}
+                    </button>
+                `;
+                menuList.appendChild(itemRow);
+            });
+
+            document.getElementById('tenantModal').classList.remove('hidden');
+        }
+
+        function closeTenantModal() {
+            document.getElementById('tenantModal').classList.add('hidden');
+        }
+
+        function toggleCartItem(tenantId, itemName, price) {
+            const index = shoppingCart.findIndex(c => c.tenantId === tenantId && c.itemName === itemName);
+            if (index > -1) {
+                shoppingCart.splice(index, 1);
+            } else {
+                shoppingCart.push({ tenantId, itemName, price });
+            }
+            updateCartUI();
+            
+            // Refresh Modal menu list state if open
+            const tenant = tenantsData.find(t => t.id === tenantId);
+            if (tenant) openTenantModal(tenantId);
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCount').textContent = shoppingCart.length;
+            const container = document.getElementById('cartItemsList');
+            const emptyText = document.getElementById('emptyCartText');
+            
+            container.innerHTML = '';
+            
+            if (shoppingCart.length === 0) {
+                emptyText.classList.remove('hidden');
+            } else {
+                emptyText.classList.add('hidden');
+                shoppingCart.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-xl text-xs border border-slate-200";
+                    row.innerHTML = `
+                        <div>
+                            <span class="font-bold text-slate-800 block">${item.itemName}</span>
+                            <span class="text-emerald-700 font-extrabold">Rp ${item.price.toLocaleString('id-ID')}</span>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-red-500 hover:text-red-700 font-bold p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            const total = shoppingCart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('cartTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function removeFromCart(idx) {
+            shoppingCart.splice(idx, 1);
+            updateCartUI();
+        }
+
+        function toggleShoppingList() {
+            document.getElementById('shoppingListModal').classList.toggle('hidden');
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').classList.remove('hidden');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            alert("Jazakallahu khair! Pendaftaran UMKM Anda telah diterima panitia JABer DKM Nurul Huda. Tim kami akan menghubungi Anda melalui WhatsApp.");
+            closeRegisterModal();
+        }
+
+        function copyRekening() {
+            const rek = document.getElementById('noRekening').innerText;
+            const tempInput = document.createElement('input');
+            tempInput.value = rek;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Nomor Rekening BSI (7362864903) berhasil disalin!');
+        }
+    </script>
+</body>
+</html>
